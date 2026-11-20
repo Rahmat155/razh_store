@@ -138,17 +138,25 @@
     return value;
   }
 
-  function snapshotData(snapshot) {
-    if (!snapshot.exists) return null;
+   function snapshotData(snapshot) {
+  if (!snapshot.exists) return null;
 
-    const data = normalizeValue(snapshot.data() || {});
+  const data = normalizeValue(snapshot.data() || {});
 
-    if (data.id === undefined) {
-      data.id = 1;
+  // Katalog disimpan sebagai JSON string agar aman
+  // dari batasan nested arrays di Firestore.
+  if (typeof data.catalog === "string") {
+    try {
+      data.catalog = JSON.parse(data.catalog);
+    } catch (error) {
+      console.error("Gagal membaca JSON katalog:", error);
+      data.catalog = [];
     }
-
-    return data;
   }
+
+  if (data.id === undefined) data.id = 1;
+  return data;
+}
 
   class Query {
     constructor(table) {
@@ -287,21 +295,18 @@
         }
 
         // Menambahkan pesanan.
-        if (this.action === "insert") {
-          const payload = Object.assign({}, this.payload, {
-            created_at:
-              firebase.firestore.FieldValue.serverTimestamp()
-          });
+        if (this.action === "upsert") {
+  const data = Object.assign({}, this.payload);
+  delete data.id;
 
-          const created = await ref.add(
-            encodeFirestoreValue(payload, false)
-          );
+  // Ubah katalog menjadi JSON string sebelum disimpan.
+  if (this.table === "store_catalog" && Array.isArray(data.catalog)) {
+    data.catalog = JSON.stringify(data.catalog);
+  }
 
-          return {
-            data: { id: created.id },
-            error: null
-          };
-        }
+  await ref.set(data, { merge: true });
+  return { data: null, error: null };
+}
 
         // Membaca daftar pesanan.
         let query = ref;
