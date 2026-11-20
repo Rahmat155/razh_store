@@ -6,7 +6,7 @@
   "use strict";
 
   const firebaseConfig = {
-    apiKey: "AIzaSyB3av1kZn3Xwn28ow8jTT8ku1Q3-L407M",
+    apiKey: "AIzaSyB3av1kZn3Xwn28ow8jTT8ku1Q3-L407-M",
     authDomain: "razh-store.firebaseapp.com",
     projectId: "razh-store",
     storageBucket: "razh-store.firebasestorage.app",
