@@ -65,6 +65,10 @@
     return (e && e.message) || "Permintaan Firestore gagal.";
   }
 
+  // Firestore melarang nama field berformat "__nama__". Pembungkus array versi lama
+  // (mis. "__array__") dikenali dan dibuka, nama lain yang terlanjur ada diganti aman.
+  const isReserved = function (k) { return /^__.*__$/.test(k); };
+  const safeKey = function (k) { return isReserved(k) ? "f_" + (k.replace(/^_+|_+$/g, "") || "x") : k; };
   const clean = function (v) { return JSON.parse(JSON.stringify(v === undefined ? null : v)); };
 
   function encode(value, insideArray) {
@@ -74,7 +78,7 @@
     }
     if (value && typeof value === "object") {
       const out = {};
-      Object.keys(value).forEach(function (k) { out[k] = encode(value[k], false); });
+      Object.keys(value).forEach(function (k) { out[safeKey(k)] = encode(value[k], false); });
       return out;
     }
     return value;
@@ -85,7 +89,7 @@
     if (Array.isArray(value)) return value.map(normalize);
     if (value && typeof value === "object") {
       const keys = Object.keys(value);
-      if (keys.length === 1 && keys[0] === WRAP && Array.isArray(value[WRAP])) return value[WRAP].map(normalize);
+      if (keys.length === 1 && (keys[0] === WRAP || isReserved(keys[0])) && Array.isArray(value[keys[0]])) return value[keys[0]].map(normalize);
       const out = {};
       keys.forEach(function (k) { out[k] = normalize(value[k]); });
       return out;
