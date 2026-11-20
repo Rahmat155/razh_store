@@ -1,1 +1,0 @@
-# razh_store
