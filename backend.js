@@ -19,7 +19,7 @@
   const ADMIN_UID = "MCS06oqU2lYJ1qSwVyeQ6J8nOzO2";
   const CLOUDINARY_CLOUD_NAME = "peeh9sup";
   const CLOUDINARY_UPLOAD_PRESET = "razh_store_upload";
-  const ARRAY_WRAPPER_KEY = "__razh_firestore_array__";
+  const const ARRAY_WRAPPER_KEY = "razhFirestoreArrayWrapper";
 
   function fail(message, code) {
     return {
