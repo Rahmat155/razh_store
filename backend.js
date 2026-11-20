@@ -1,4 +1,4 @@
-/* RAZH STORE backend: Firebase Authentication + Cloud Firestore + Cloudinary.
+/* RAZ2H STORE backend: Firebase Authentication + Cloud Firestore + Cloudinary.
    The small window.supabase adapter is retained only so the existing storefront
    code can be migrated without changing its UI/business logic. No Supabase SDK
    or Supabase service is used. */
