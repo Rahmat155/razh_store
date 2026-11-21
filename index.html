@@ -550,11 +550,10 @@ footer{background:var(--navy);border-radius:24px 24px 0 0}
 
 /* Pengumuman berjalan terus-menerus dari kanan ke kiri tanpa jeda */
 .announcement-copy{display:block;overflow:hidden;white-space:nowrap;max-width:100%;padding:4px 0!important}
-.announcement-marquee-track{display:flex;width:max-content;max-width:none;white-space:nowrap;will-change:transform;animation:razhTickerRightToLeft var(--ticker-duration,18s) linear infinite}
-.announcement-marquee-sequence{display:flex;flex:0 0 auto;align-items:center;gap:2.2rem;padding-right:2.2rem}
-.announcement-marquee-sequence span{display:inline-block;flex:0 0 auto}
-@keyframes razhTickerRightToLeft{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-@media(prefers-reduced-motion:reduce){.announcement-marquee-track{animation:none!important;white-space:normal;display:block;width:auto}.announcement-marquee-sequence{display:inline;white-space:normal;padding:0}.announcement-marquee-sequence span{display:inline}}
+.announcement-marquee-track{display:block;width:100%;overflow:hidden;white-space:nowrap}
+.announcement-marquee-track span{display:inline-block;width:max-content;max-width:none;white-space:nowrap;will-change:transform;animation:razhTickerOnePass var(--ticker-duration,12s) linear 1}
+@keyframes razhTickerOnePass{from{transform:translateX(100%)}to{transform:translateX(-100%)}}
+@media(prefers-reduced-motion:reduce){.announcement-marquee-track{white-space:normal}.announcement-marquee-track span{display:inline;white-space:normal;animation:none!important;transform:none!important}}
 }
 
 </style><script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script><script src="backend.js"></script>
@@ -692,26 +691,30 @@ async function loadLiveCatalog(){
    const esc=x=>String(x).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
    let html="";const showImg=(mode==="image"||mode==="both")&&imgs.length>0,showTxt=(mode==="text"||mode==="both")&&texts.length>0,count=Math.max(showImg?imgs.length:0,showTxt?texts.length:0);
    if(showImg)html+=`<div class="ad-image-wrap"><img id="adBannerImage" class="ad-slide" src="${esc(imgs[0])}" alt="Banner RAZH STORE" loading="lazy" onerror="this.style.display='none'"></div>`;
-   if(showTxt){const tickerText=esc(texts[0].text).replace(/\s*\n\s*/g," • ");html+=`<div class="announcement-label"><span>📢</span> INFO & PROMO RAZH STORE</div><div class="announcement-copy"><div class="announcement-marquee-track" id="adBannerText"><div class="announcement-marquee-sequence"><span>${tickerText}</span><span aria-hidden="true">${tickerText}</span></div><div class="announcement-marquee-sequence" aria-hidden="true"><span>${tickerText}</span><span>${tickerText}</span></div></div></div>`;}
+   if(showTxt){const tickerText=esc(texts[0].text).replace(/\s*\n\s*/g," • ");html+=`<div class="announcement-label"><span>📢</span> INFO & PROMO RAZH STORE</div><div class="announcement-copy"><div class="announcement-marquee-track" id="adBannerText"><span>${tickerText}</span></div></div>`;}
    if(count>1)html+=`<div class="ad-dots" id="adBannerDots">${Array.from({length:count},(_,i)=>`<button type="button" class="ad-dot ${i===0?"active":""}" aria-label="Tampilkan slide ${i+1}" data-slide="${i}"></button>`).join("")}</div>`;
    if(html){
     box.innerHTML=html;box.classList.toggle("image-only",mode==="image"&&count<2);box.classList.remove("hidden");
+    let tickerIndex=0;
     const updateTicker=(value)=>{
      const track=document.getElementById("adBannerText");if(!track)return;
      const clean=String(value).replace(/\\s*\\n\\s*/g," • ");
-     const first=document.createElement("div");first.className="announcement-marquee-sequence";
-     let guard=0;
-     do{const item=document.createElement("span");item.textContent=clean;first.appendChild(item);guard++}
-     while(first.scrollWidth<box.clientWidth+100&&guard<30);
-     const second=first.cloneNode(true);second.setAttribute("aria-hidden","true");
-     track.replaceChildren(first,second);
-     track.style.setProperty("--ticker-duration",Math.max(8,first.scrollWidth/48)+"s");
+     const span=document.createElement("span");span.textContent=clean;
+     track.replaceChildren(span);
+     const distance=box.clientWidth+Math.max(span.scrollWidth,1);
+     const duration=Math.max(7,distance/48);
+     track.style.setProperty("--ticker-duration",duration+"s");
+     span.addEventListener("animationend",()=>{
+      if(!showTxt||!texts.length)return;
+      tickerIndex=(tickerIndex+1)%texts.length;
+      updateTicker(texts[tickerIndex].text);
+     },{once:true});
     };
     if(showTxt)updateTicker(texts[0].text);
     let idx=0,paused=false;
     const go=i=>{if(count<2)return;idx=(i+count)%count;
      const im=document.getElementById("adBannerImage");if(im&&showImg){im.style.display="";im.src=imgs[idx%imgs.length];im.classList.remove("ad-slide");void im.offsetWidth;im.classList.add("ad-slide")}
-     const tx=document.getElementById("adBannerText");if(tx&&showTxt)updateTicker(texts[idx%texts.length].text)
+     if(showTxt){tickerIndex=idx%texts.length;updateTicker(texts[tickerIndex].text)}
      document.querySelectorAll("#adBannerDots .ad-dot").forEach((d,j)=>d.classList.toggle("active",j===idx))};
     const restart=()=>{if(bannerTimer){clearInterval(bannerTimer);bannerTimer=null}if(count>1&&!window.matchMedia("(prefers-reduced-motion: reduce)").matches)bannerTimer=setInterval(()=>{if(!paused&&!document.hidden)go(idx+1)},5000)};
     const dots=document.getElementById("adBannerDots");if(dots)dots.addEventListener("click",e=>{const b=e.target.closest("[data-slide]");if(b){go(Number(b.dataset.slide));restart()}});
