@@ -661,15 +661,17 @@ async function orderNow(){
   document.getElementById("detailView").classList.remove("show");
   const paymentView=document.getElementById("paymentView");
   paymentView.classList.add("show");
-  // Otomatis arahkan layar ke bagian pembayaran setelah panel QRIS tampil.
-  // Sedikit jeda memberi waktu browser menghitung ulang tinggi layout.
-  requestAnimationFrame(()=>setTimeout(()=>{
-   const target=document.getElementById("paymentView");
-   if(!target || !target.classList.contains("show"))return;
-   const top=window.scrollY+target.getBoundingClientRect().top-10;
+  // Otomatis gulir sampai mentok bawah setelah halaman pembayaran tampil.
+  // Pengulangan singkat mengantisipasi tinggi gambar QRIS/font yang baru selesai dimuat.
+  const scrollPaymentToBottom=()=>{
+   if(!paymentView.classList.contains("show"))return;
    const reduceMotion=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-   window.scrollTo({top:Math.max(0,top),behavior:reduceMotion?"auto":"smooth"});
-  },120));
+   const bottom=Math.max(0,document.documentElement.scrollHeight-window.innerHeight);
+   window.scrollTo({top:bottom,behavior:reduceMotion?"auto":"smooth"});
+  };
+  requestAnimationFrame(()=>setTimeout(scrollPaymentToBottom,180));
+  setTimeout(scrollPaymentToBottom,650);
+  setTimeout(scrollPaymentToBottom,1100);
   orderButton.disabled=false;orderButton.textContent=originalLabel;
   if(storeTourActive&&storeTourIndex===3){storeTourWaiting=false;storeTourIndex++;showTourStep();}
  }catch(e){
