@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#1676d2"><title>Admin RAZH STORE</title><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a2540'/%3E%3Cpath d='M12 46 8 20l14 12 10-18 10 18 14-12-4 26z' fill='%23ffc53d'/%3E%3C/svg%3E"><meta name="robots" content="noindex,nofollow"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"></noscript>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script><script src="backend.js"></script>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f2f8ff;color:#183d61;font-family:Arial,sans-serif}.wrap{max-width:850px;margin:auto;padding:12px}header{background:linear-gradient(120deg,#0c5eb2,#2998e9);color:white;padding:18px;border-radius:0 0 20px 20px}h1{font-size:22px;margin:0}.muted{font-size:12px;color:#718da7;line-height:1.5}header .muted{color:#e4f3ff}.card{background:white;border:1px solid #d5eafa;border-radius:15px;padding:14px;margin:12px 0}label{display:block;font-size:12px;font-weight:bold;margin:10px 0 5px}input,textarea,select{width:100%;padding:11px;border:1px solid #cfe3f3;border-radius:10px;font:14px Arial;color:#183d61;background:#fff}textarea{min-height:90px;line-height:1.5}button{border:0;border-radius:10px;padding:11px 13px;font-weight:bold;cursor:pointer}.blue{background:#1676d2;color:white}.soft{background:#e7f4ff;color:#1769b5}.red{background:#fff0f0;color:#b33b3b}.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.row button{flex:1}.apps{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px}.app{text-align:left;background:white;border:1px solid #d5eafa;color:#183d61}.app.active{background:#eaf6ff;border-color:#5aa7e5}.hidden{display:none!important}.editor-card{animation:editorIn .22s ease-out}@keyframes editorIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}.app{transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease}.app:active{transform:scale(.985)}.app.active{box-shadow:0 4px 14px #1676d220}.action-menu{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.action-menu button{flex:1;min-width:120px}.notice.err{background:#fff0f0;color:#b33b3b}.notice{padding:10px;border-radius:9px;background:#eef8f0;color:#267344;font-size:12px;margin-top:10px}.tabs{display:flex;gap:7px;overflow:auto;padding:5px 0 10px}.tab{white-space:nowrap;background:#e8f4ff;color:#246a9f}.tab.active{background:#1676d2;color:#fff}.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.pkg{background:#f8fcff;border:1px solid #e1eff9;border-radius:12px;padding:11px;margin:10px 0}.duration-row{display:grid;grid-template-columns:1.05fr 1fr 1fr auto;gap:6px;margin:7px 0;align-items:center}.duration-row input{min-width:0;padding:9px 6px;font-size:12px}.small{font-size:10px;color:#7892a9}.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.stat{background:#f3f9ff;border:1px solid #dceefa;border-radius:12px;padding:12px}.stat strong{display:block;font-size:18px;color:#1264aa;margin-top:5px}.order{border-top:1px solid #edf4fa;padding:10px 0}.warn{padding:10px;background:#fff8e8;border:1px solid #f2dfb4;border-radius:10px;color:#85631d;font-size:11px;line-height:1.5;margin-top:10px}@media(max-width:560px){.apps{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.duration-row{grid-template-columns:1fr 1fr}.duration-row button{grid-column:2}.stat-grid{grid-template-columns:1fr 1fr}}
+@media(prefers-reduced-motion:reduce){.editor-card,.app{animation:none!important;transition:none!important}}
+
+/* ===== RAZH STORE v2: admin design layer ===== */
+:root{--brand:#1570ef;--navy:#0a2540;--ink:#14304d;--mut:#64809b;--line:#dbe8f4;--sky:#eaf3ff;--sh:0 1px 2px #0a254012,0 6px 18px #0a25400f}
+body{font-family:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:#f4f8fc;line-height:1.5;padding-bottom:84px}
+header{background:var(--navy);border-radius:0 0 22px 22px;padding:16px 0}h1{font-size:20px;font-weight:800}.wrap{max-width:980px}
+.card{border-radius:16px;border:1px solid var(--line);box-shadow:var(--sh);padding:16px}
+input,textarea,select{font-size:16px;border-radius:12px;padding:12px;border:1px solid var(--line);transition:border-color .15s,box-shadow .15s}
+input:focus,textarea:focus,select:focus{border-color:var(--brand);box-shadow:0 0 0 3px #1570ef22;outline:0}
+label{font-size:12px;font-weight:700;color:var(--ink);margin:12px 0 6px}
+button{border-radius:12px;min-height:44px;font-family:inherit;font-weight:700;transition:transform .12s,opacity .15s,background .15s}button:active{transform:scale(.97)}
+button:disabled{opacity:.65;cursor:progress}
+button:disabled:before{content:"";display:inline-block;width:12px;height:12px;margin-right:7px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin .7s linear infinite;vertical-align:-2px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.blue{background:var(--brand)}.soft{background:var(--sky);color:#0f56b3}
+#loginCard{max-width:420px;margin:36px auto}
+.apps{grid-template-columns:repeat(auto-fill,minmax(210px,1fr))}.app{border-radius:14px;padding:12px;font-weight:600;min-height:52px}.apps>.editor-card{margin:8px 0 14px;scroll-margin-top:14px;border:1.5px solid #b9d9f5;box-shadow:0 8px 24px #0a254018}
+.app.active{background:var(--sky);border-color:var(--brand);box-shadow:0 0 0 3px #1570ef22}
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:50;display:grid;grid-template-columns:repeat(6,1fr);gap:2px;padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px));background:#fffffff2;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-top:1px solid var(--line);overflow:visible}
+.tab{display:flex;flex-direction:column;align-items:center;gap:1px;background:transparent;color:var(--mut);padding:5px 2px;min-height:52px;font-size:10px;white-space:nowrap}
+input[type=file]{padding:10px;background:#f7fbff;font-size:14px}input[type=file]::file-selector-button{border:0;border-radius:10px;background:#eaf3ff;color:#0f56b3;font:700 13px "Plus Jakarta Sans",sans-serif;padding:10px 14px;margin-right:10px;cursor:pointer}.tab{position:relative}.badge-dot{position:absolute;top:1px;right:14%;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:#e5484d;color:#fff;font:700 11px/18px "Plus Jakarta Sans",sans-serif;text-align:center;font-style:normal}.order .code{font-family:ui-monospace,Menlo,Consolas,monospace;font-weight:800;color:#0f56b3;letter-spacing:1px;margin-right:6px}.filters{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0 8px}.tab span{font-size:19px;line-height:1}.tab b{font-weight:700}.tab.active{background:var(--sky);color:var(--brand)}
+.order{border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin:10px 0;background:#fff}
+.chip{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;margin-left:8px;vertical-align:1px}
+.chip.pending{background:#fff4d6;color:#8a5b00}.chip.processing{background:#e1efff;color:#0f56b3}.chip.completed{background:#e3f6ea;color:#14663a}.chip.cancelled{background:#fdeaea;color:#a63232}
+.stat-grid{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.stat{background:#fff;border-radius:14px}.stat strong{font-size:22px;color:var(--ink)}
+.bar-row{display:grid;grid-template-columns:minmax(80px,1.2fr) 2fr auto;gap:10px;align-items:center;margin:9px 0;font-size:13px;color:var(--ink)}
+.bar-row i{height:10px;border-radius:99px;background:linear-gradient(90deg,var(--brand) var(--w),#e3eef9 var(--w))}
+.editor-card .row:has(>button[onclick="saveApp()"]){position:sticky;bottom:calc(70px + env(safe-area-inset-bottom,0px));background:#fffffff2;padding:10px 0;z-index:5}
+@media(min-width:900px){
+ body{padding:0 0 0 230px}body:has(#panel.hidden){padding-left:0}
+ .tabs{top:0;right:auto;width:230px;display:flex;flex-direction:column;gap:6px;padding:74px 14px 14px;border-top:0;border-right:1px solid var(--line);background:#fff;-webkit-backdrop-filter:none;backdrop-filter:none}
+ .tabs:before{content:"♛ RAZH STORE";position:absolute;top:22px;left:20px;font-weight:800;font-size:17px;color:var(--navy)}
+ .tab{flex-direction:row;justify-content:flex-start;gap:12px;font-size:14px;padding:10px 14px;min-height:46px}.tab.logout{margin-top:auto}
+ .editor-card .row:has(>button[onclick="saveApp()"]){bottom:0}
+}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+.price-warn{margin:6px 0;padding:8px 10px;border-radius:10px;background:#fff4e5;border:1px solid #f3cf9a;color:#8a5200;font-size:12px;line-height:1.45;font-weight:700}
+</style></head><body>
+<header><div class="wrap"><h1>♛ RAZH STORE</h1><div class="muted">PANEL ADMIN • Kelola toko dari HP</div></div></header>
+<main class="wrap">
+<section class="card" id="loginCard"><b>Login Admin</b><p class="muted">Masuk dengan email dan password akun Firebase admin.</p><label>Email admin</label><input id="email" type="email" autocomplete="username"><label>Password</label><input id="password" type="password" autocomplete="current-password"><div class="row"><button class="blue" onclick="login()">Masuk</button></div><div id="loginMsg" class="muted"></div></section>
+<section id="panel" class="hidden">
+<div class="tabs"><button class="tab active" data-tab="products" onclick="showTab('products')"><span>📦</span><b>Produk</b></button><button class="tab" data-tab="banner" onclick="showTab('banner')"><span>📢</span><b>Banner</b></button><button class="tab" data-tab="qris" onclick="showTab('qris')"><span>💳</span><b>QRIS</b></button><button class="tab" data-tab="orders" onclick="showTab('orders')"><span>🧾</span><b>Pesanan</b><em id="pendingBadge" class="badge-dot hidden"></em></button><button class="tab" data-tab="stats" onclick="showTab('stats')"><span>📊</span><b>Statistik</b></button><button class="tab logout" onclick="logout()"><span>⎋</span><b>Keluar</b></button></div>
+<section id="tab-products">
+<div id="emptyCatalogBox" class="notice hidden" style="margin-bottom:12px"><b>Katalog Firestore masih kosong, jadi toko belum menampilkan produk.</b><br><span class="small">Impor produk bawaan dari website (18 aplikasi lengkap dengan paket dan harga) dengan satu tombol, atau tambahkan produk satu per satu.</span><div style="margin-top:10px"><button class="blue" onclick="importDefaultCatalog()">Impor 18 produk bawaan</button></div></div>
+<div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><b>Daftar aplikasi</b><span class="small" id="appCount"></span></div><div class="muted">Pilih aplikasi untuk mengubah detail dan harga.</div><div class="apps" id="appList"></div><div class="row"><button class="blue" onclick="addApp()">＋ Tambah aplikasi</button></div><div id="selectedActions" class="action-menu hidden"><button class="soft" onclick="openSelectedEditor()">✏️ Edit aplikasi terpilih</button><button class="red" onclick="deleteApp()">🗑 Hapus aplikasi terpilih</button></div><div id="selectHint" class="muted" style="margin-top:10px">Pilih aplikasi di atas untuk menampilkan menu edit dan hapus.</div></div>
+<div class="card editor-card hidden" id="editorCard"><b id="formTitle">Detail aplikasi</b>
+<label>Nama aplikasi</label><input id="appName">
+<div class="grid"><div><label>Ikon / inisial</label><input id="appIcon" maxlength="4"></div><div><label>Kategori</label><select id="appCategory" onchange="onCategoryChange()"></select><input id="appCategoryNew" class="hidden" placeholder="Nama kategori baru, mis. Gaming" maxlength="30" style="margin-top:8px"><div class="muted">Pilih kategori yang sudah ada, atau pilih “＋ Kategori baru…” untuk membuat kategori sendiri. Kategori akan muncul di halaman toko setelah disimpan.</div></div></div>
+<label>URL logo aplikasi (opsional)</label><input id="appLogo" type="url" placeholder="https://.../logo-aplikasi.png"><input id="appLogoFile" type="file" accept="image/png,image/jpeg,image/webp"><button type="button" class="soft" onclick="uploadAppLogo()">Upload logo ke Cloudinary</button><div class="muted">Kosongkan jika ingin memakai ikon / inisial seperti sebelumnya. Gunakan link gambar langsung (PNG, JPG, WEBP, atau SVG).</div><img id="appLogoPreview" class="hidden" alt="Preview logo aplikasi" style="width:64px;height:64px;object-fit:contain;border:1px solid #d5eafa;border-radius:12px;padding:6px;margin-top:8px">
+<div class="muted" style="margin:4px 0 8px">Status dan label di bagian ini berlaku sebagai pengaturan utama aplikasi. Kamu bisa menimpa keduanya pada setiap harga di bagian Paket & harga.</div><div class="grid"><div><label>Status produk</label><select id="appStatus"><option value="available">Tersedia</option><option value="soldout">Habis</option><option value="maintenance">Maintenance</option></select></div><div><label>Label produk</label><input id="appBadge" placeholder="Baru / Harga turun"></div></div><div class="card" style="background:#f7fbff;margin-top:10px"><b>Warna label status</b><label for="statusTheme">Pilih tema warna</label><select id="statusTheme" onchange="toggleCustomStatusColors()"><option value="default">Warna otomatis (sesuai status)</option><option value="blue">Biru</option><option value="purple">Ungu</option><option value="orange">Oranye</option><option value="pink">Merah muda</option><option value="dark">Gelap</option><option value="custom">Custom sendiri</option></select><div id="customStatusColors" class="grid hidden"><div><label for="statusBgColor">Warna latar</label><input id="statusBgColor" type="color" value="#e9f8ee" style="height:44px;padding:4px"></div><div><label for="statusTextColor">Warna tulisan</label><input id="statusTextColor" type="color" value="#267344" style="height:44px;padding:4px"></div></div><div class="muted">Warna ini berlaku untuk label status aplikasi yang dipilih. Pilih tema siap pakai atau atur warna latar dan tulisan sendiri.</div><div style="margin-top:8px"><span id="statusColorPreview" class="status-badge" style="display:inline-block">TERSEDIA</span></div></div><div class="card" style="background:#f4faff;margin-top:12px"><b>Pengaturan data pembeli per paket</b><div class="muted">Atur kebutuhan email dan password di masing-masing paket pada bagian Paket & harga. Pengaturan hanya berlaku untuk paket yang dipilih pembeli, bukan seluruh aplikasi. Data pembeli hanya dimasukkan ke pesan WhatsApp admin dan tidak disimpan ke database pesanan.</div></div>
+<div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px"><b>Paket & harga</b><button class="soft" onclick="addPackage()">＋ Tambah paket</button></div><div class="muted">Harga promo boleh dikosongkan atau isi 0 jika tidak ada promo.</div><div id="packagesEditor"></div>
+<label>S&K / keterangan (satu poin per baris)</label><textarea id="appTerms"></textarea><div class="row"><button class="blue" onclick="saveApp()">Simpan aplikasi</button><button class="soft" onclick="resetForm()">Batal edit</button></div><div id="msg"></div>
+<div class="row"><button class="blue" style="width:100%" onclick="publish()">Simpan & Terbitkan ke Website</button></div>
+</div></section>
+<section id="tab-qris" class="hidden"><div class="card"><b>Ganti gambar QRIS</b><p class="muted">Pilih gambar QRIS baru dari HP. Setelah disimpan, gambar di halaman pembayaran pembeli akan ikut berubah.</p><img id="qrisPreview" src="qris-razh-store.jpg" alt="Preview QRIS" style="display:block;width:100%;max-width:340px;margin:12px auto;border:1px solid #d5eafa;border-radius:12px"><label>Pilih gambar QRIS baru</label><input id="qrisFile" type="file" accept="image/png,image/jpeg,image/webp"><div class="row"><button class="blue" onclick="saveQris()">Simpan QRIS</button><button class="soft" onclick="resetQris()">Pakai QRIS bawaan</button></div><div id="qrisMsg"></div><p class="muted">Gunakan gambar QRIS yang jelas dan bisa dipindai. Disarankan ukuran di bawah 1 MB.</p></div></section>
+<section id="tab-banner" class="hidden"><div class="card"><b>Banner pengumuman toko</b><p class="muted">Pilih tampilan teks, gambar, atau gabungan keduanya. Gambar memakai tautan gambar publik agar website tetap ringan.</p><label>Jenis konten banner</label><select id="bannerMode"><option value="text">Teks saja</option><option value="image">Gambar saja</option><option value="both">Gambar + teks</option></select><label>Daftar teks promo</label><div id="bannerTextsEditor"></div><button type="button" class="soft" onclick="addBannerText()">＋ Tambah teks</button><div class="muted">Setiap teks bisa diaktifkan atau disembunyikan sendiri. Teks aktif akan berganti otomatis seperti iklan.</div><label>Upload gambar banner</label><input id="bannerFiles" type="file" accept="image/png,image/jpeg,image/webp" multiple><button type="button" class="soft" onclick="uploadBannerImages()">Upload gambar ke Cloudinary</button><label>URL gambar banner (satu link per baris)</label><textarea id="bannerImage" placeholder="https://.../promo-1.jpg&#10;https://.../promo-2.jpg&#10;https://.../promo-3.jpg" style="min-height:100px"></textarea><div class="muted">Masukkan beberapa link gambar langsung, satu link per baris. Jika lebih dari satu, banner akan berganti otomatis seperti iklan. JPG, PNG, atau WEBP disarankan.</div><img id="bannerPreview" class="hidden" alt="Preview banner" style="width:100%;max-height:220px;object-fit:cover;border-radius:12px;margin-top:10px"><label>Status banner</label><select id="bannerActive"><option value="true">Tampilkan</option><option value="false">Sembunyikan</option></select><button class="blue" style="width:100%;margin-top:12px" onclick="saveBanner()">Simpan banner</button><div id="bannerMsg"></div></div></section>
+<section id="tab-orders" class="hidden"><div class="card"><b>Riwayat pesanan</b><p class="muted">Pesanan yang dibuat dari tombol PESAN SEKARANG akan tercatat di sini.</p><div class="filters"><select id="orderFilter" onchange="renderOrders()"><option value="all">Semua status</option><option value="pending">Menunggu</option><option value="processing">Diproses</option><option value="completed">Selesai</option><option value="cancelled">Dibatalkan</option></select><input id="orderSearch" type="search" placeholder="Cari pesanan..." oninput="renderOrders()"></div><div class="filters"><button class="soft" onclick="loadOrders()">↻ Muat ulang</button><button class="soft" onclick="exportOrdersCsv()">⬇ Ekspor CSV</button></div><div id="ordersInfo" class="small"></div><div id="ordersList"></div></div></section>
+<section id="tab-stats" class="hidden"><div class="card"><b>Dashboard statistik</b><p class="muted">Ringkasan dihitung dari pesanan yang tercatat. Omzet menghitung pesanan berstatus selesai.</p><div class="stat-grid"><div class="stat">Omzet selesai<strong id="statRevenue">Rp0</strong></div><div class="stat">Total pesanan<strong id="statOrders">0</strong></div><div class="stat">Menunggu<strong id="statPending">0</strong></div><div class="stat">Omzet bulan ini<strong id="statMonth">Rp0</strong></div><div class="stat">Pesanan hari ini<strong id="statToday">0</strong></div></div><h3 style="font-size:14px;margin-top:18px">Produk terlaris</h3><div id="topProducts" class="muted">Belum ada data.</div><button class="soft" style="width:100%;margin-top:12px" onclick="loadStats()">↻ Perbarui statistik</button></div></section>
+</section></main>
+<script>
+const ADMIN_UID="MCS06oqU2lYJ1qSwVyeQ6J8nOzO2";
+const sb=(window.supabase&&window.supabase.createClient)?window.supabase.createClient():null;let catalog=[],selectedId=null,catalogVersion=null,dirty=false;const busy={};
+const DEFAULT_CATALOG=[{"id":1,"n":"Netflix Premium","i":"N","p":[["Sharing · maks. 1 perangkat",[["1 Bulan",15000],["7 Hari",8000],["5 Hari",7000],["3 Hari",5500],["2 Hari",4500],["1 Hari",2500]]],["Semi Private · maks. 2 perangkat",[["1 Bulan",29000],["7 Hari",12000]]]],"t":["Full garansi 30 hari","Bisa dipakai di luar negeri","Support berbagai perangkat termasuk TV","Akun strong & stabil","Bisa diperpanjang dengan akun yang sama","Kualitas hingga 4K"],"s":"available","c":"Streaming"},{"id":2,"n":"YouTube Premium","i":"▶","p":[["Famplan",[["1 Bulan",1000]]]],"t":["Full garansi","Via invite email","Tanpa iklan","Include YouTube Music","Bisa dipakai di berbagai perangkat"],"s":"available","c":"Streaming"},{"id":3,"n":"YouTube JasPay","i":"▶","requiresEmailPassword":true,"emailMustBeNew":true,"p":[["Famhead · 5 member",[["1 Bulan",2000]]],["Indi Plan",[["1 Bulan",2000]]]],"t":["Bisa invite hingga 5 member","Wajib email baru yang belum pernah digunakan","Full garansi sesuai paket","Proses cepat"],"s":"available","c":"Streaming"},{"id":4,"n":"Spotify Premium","i":"♫","b":"Harga turun","k":"down","p":[["Famplan",[["3 Bulan",46000],["2 Bulan",28000],["1 Bulan",16000]]],["Tanpa garansi",[["3 Bulan",9000]]]],"t":["Famplan full garansi","Maks. login 1 perangkat","Bisa dipakai di semua perangkat"],"s":"available","c":"Musik"},{"id":5,"n":"CapCut Pro","i":"✂","p":[["Private",[["6 Bulan",99000],["1 Bulan",26000],["7 Hari",6000]]]],"t":["Maks. login 1–2 perangkat","Garansi 1 bulan untuk paket 6 bulan","Akses fitur Pro lengkap"],"s":"available","c":"Desain & Video"},{"id":6,"n":"Canva EDU","i":"C","p":[["Education",[["Lifetime",4000],["1 Tahun",2500]]]],"t":["Via invite email","Menggunakan email pembeli","Support semua perangkat","Untuk pendidikan / pelajar","Garansi 1 bulan"],"s":"available","c":"Desain & Video"},{"id":7,"n":"BSTATION","i":"▣","p":[["Sharing",[["1 Tahun",9000],["1 Bulan",6000]]]],"t":["Login menggunakan akun yang diberikan","Maks. login 1 perangkat","Akun dari seller","Garansi 6 bulan"],"s":"available","c":"Streaming"},{"id":8,"n":"WeTV","i":"▶","p":[["Private",[["1 Bulan",18000]]],["Sharing",[["1 Bulan",8000]]]],"t":["Login menggunakan akun yang diberikan","Maks. login 1 perangkat","Full garansi"],"s":"available","c":"Streaming"},{"id":9,"n":"VIU Premium","i":"▷","p":[["Private",[["Lifetime",1000],["1 Tahun",600]]]],"t":["Region Indonesia","Garansi 4 bulan"],"s":"available","c":"Streaming"},{"id":10,"n":"Prime Video","i":"P","p":[["Private",[["1 Bulan",9000]]],["Sharing",[["1 Bulan",6000]]]],"t":["Full garansi","Bisa dipakai di semua perangkat"],"s":"available","c":"Streaming"},{"id":11,"n":"iQIYI","i":"iQ","p":[["Sharing",[["1 Bulan Premium",7000],["1 Bulan Standard",5800]]]],"t":["Maks. login 1 perangkat","Tidak bisa digunakan di TV","Garansi BF"],"s":"available","c":"Streaming"},{"id":12,"n":"Picsart Pro","i":"P","p":[["Private · maks. 10 perangkat",[["1 Bulan",8500]]],["Sharing · maks. 1 perangkat",[["1 Bulan",3500]]]],"t":["Full garansi","Akses fitur Pro lengkap"],"s":"available","c":"Desain & Foto"},{"id":13,"n":"Alight Motion","i":"◉","p":[["Private",[["1 Tahun",500]]]],"t":["Akun dari seller","Garansi 6 bulan","Akses fitur Pro lengkap"],"s":"available","c":"Desain & Video"},{"id":14,"n":"Crunchyroll","i":"C","b":"Harga turun","k":"down","p":[["Private · maks. 5 perangkat",[["1 Bulan",17000]]],["Sharing",[["1 Bulan",6500]]]],"t":["Garansi BF","Maks. login sesuai paket"],"s":"available","c":"Streaming"},{"id":15,"n":"Youku","i":"▶","p":[["Sharing",[["1 Tahun",10000],["1 Bulan",6000]]]],"t":["Garansi BF"],"s":"available","c":"Streaming"},{"id":16,"n":"Zoom Meeting","i":"▣","p":[["Private",[["14 Hari",6000],["7 Hari",5000]]]],"t":["Akun dari seller","Bisa 100 peserta","Full garansi"],"s":"available","c":"Produktivitas"},{"id":17,"n":"HBO","i":"H","b":"Baru","k":"new","p":[["Private",[["1 Bulan Standar",15500]]],["Sharing",[["1 Bulan Ultimate",9000],["1 Bulan Standar",6500]]]],"t":["Support semua perangkat","Garansi BF"],"s":"available","c":"Streaming"},{"id":18,"n":"Vidio Platinum","i":"V","b":"Baru","k":"new","p":[["Private",[["1 Bulan All Device",42500],["1 Bulan Mobile",25500]]]],"t":["Maks. login 2 perangkat","Garansi BF"],"s":"available","c":"Streaming"}];
+async function importDefaultCatalog(){
+ if(busy.imp)return;
+ if(catalog.length&&!confirm("Katalog sudah berisi "+catalog.length+" aplikasi. Impor akan MENIMPA seluruhnya. Lanjutkan?"))return;
+ if(!confirm("Impor "+DEFAULT_CATALOG.length+" produk bawaan ke Firestore?"))return;
+ busy.imp=true;const prev=catalog;catalog=JSON.parse(JSON.stringify(DEFAULT_CATALOG));
+ try{const ok=await persistCatalogAndVerify("Katalog bawaan berhasil diimpor dan diverifikasi.");if(!ok)catalog=prev}finally{busy.imp=false;renderList()}
+}
+const $=id=>document.getElementById(id),money=n=>"Rp"+Number(n||0).toLocaleString("id-ID");
+function notice(t,id="msg"){const e=$(id);e.textContent=t;e.className="notice"+(/^(GAGAL|Gagal|Belum bisa)/.test(t)?" err":"")}
+async function login(){
+ if(!sb){$("loginMsg").textContent=window.RAZH_BACKEND_ERROR||"Backend Firebase belum termuat. Periksa file backend.js dan koneksi internet.";return}
+ $("loginMsg").textContent="Memeriksa akun Firebase...";
+ try{
+  const {data,error}=await sb.auth.signInWithPassword({email:$("email").value.trim(),password:$("password").value});
+  if(error){$("loginMsg").textContent=error.message;return}
+  if(data.user.id!==ADMIN_UID){await sb.auth.signOut();$("loginMsg").textContent="Akun ini bukan admin yang diizinkan.";return}
+  // Create the empty catalog document only if it does not exist; never overwrite an existing catalog.
+  const {data:existingCatalog,error:checkError}=await sb.from("store_catalog").select("catalog").eq("id",1).maybeSingle();
+  if(checkError)throw new Error("Gagal memeriksa katalog Firestore: "+checkError.message);
+  if(!existingCatalog){
+   const {error:initError}=await sb.from("store_catalog").upsert({id:1,catalog:[],updated_at:new Date().toISOString()});
+   if(initError)throw new Error("Login berhasil, tetapi dokumen katalog awal gagal dibuat: "+initError.message);
+  }
+  const loaded=await loadCatalog();
+  if(!loaded){$("loginMsg").textContent="Login berhasil, tetapi katalog gagal dimuat. Periksa koneksi/database lalu coba lagi.";return}
+  $("loginCard").classList.add("hidden");$("panel").classList.remove("hidden");loadOrders();
+ }catch(e){$("loginMsg").textContent="Terjadi kesalahan saat login: "+(e?.message||"Coba lagi.");}
+}
+async function logout(){await sb.auth.signOut();$("panel").classList.add("hidden");$("loginCard").classList.remove("hidden")}
+function showTab(tab){["products","banner","qris","orders","stats"].forEach(x=>$("tab-"+x).classList.toggle("hidden",x!==tab));document.querySelectorAll(".tab[data-tab]").forEach(b=>b.classList.toggle("active",b.dataset.tab===tab));if(tab==="banner")loadBanner();if(tab==="qris")loadQris();if(tab==="orders")loadOrders();if(tab==="stats")loadStats()}
+async function loadCatalog(){
+ try{
+  const {data,error}=await sb.from("store_catalog").select("catalog,updated_at").eq("id",1).single();
+  if(error||!data||!Array.isArray(data.catalog)){$("loginMsg").textContent="Gagal memuat katalog Firestore: "+(error?.message||"Data katalog tidak valid.");return false}
+  catalog=data.catalog;catalogVersion=data.updated_at??null;
+  catalog.forEach(a=>{a.s=a.s||"available";a.c=a.c||"Lainnya";if(!Array.isArray(a.p))a.p=[];a.p.forEach(p=>{if(!Array.isArray(p[1]))p[1]=[];p[1].forEach(v=>{if(v.length<3)v[2]=0});if(!p[2]&&(a.requiresEmail||a.requiresEmailPassword||a.emailMustBeNew||a.n==="YouTube JasPay"))p[2]={requiresEmail:!!(a.requiresEmail||a.requiresEmailPassword||a.n==="YouTube JasPay"),requiresEmailPassword:!!(a.requiresEmailPassword||a.n==="YouTube JasPay"),emailMustBeNew:!!(a.emailMustBeNew||a.n==="YouTube JasPay")}});delete a.requiresEmail;delete a.requiresEmailPassword;delete a.emailMustBeNew});
+  selectedId=null;renderList();hideEditor();return true;
+ }catch(e){$("loginMsg").textContent="Gagal memuat katalog: "+(e?.message||"Periksa koneksi.");return false}
+}
+function renderList(){
+ const editor=$("editorCard");
+ // Lepaskan editor sebelum daftar dirender ulang agar node editor tidak terhapus.
+ if(editor.parentElement===$("appList"))$("tab-products").appendChild(editor);
+ $("emptyCatalogBox").classList.toggle("hidden",catalog.length>0);
+ $("appCount").textContent=catalog.length+" aplikasi";
+ $("appList").innerHTML=[...catalog].sort((a,b)=>(a.n||"").localeCompare(b.n||"","id",{sensitivity:"base"})).map(a=>`<button class="app ${a.id===selectedId?"active":""}" data-app-id="${a.id}" onclick="selectApp(${a.id})">${esc(a.i||"•")} ${esc(a.n)} · ${a.s==="available"?"Tersedia":a.s==="soldout"?"Habis":"Maintenance"}</button>`).join("");
+}
+function placeEditor(){
+ const editor=$("editorCard"),list=$("appList");
+ if(selectedId!==null){
+  const btn=list.querySelector(`[data-app-id="${selectedId}"]`);
+  if(btn){editor.style.gridColumn="1 / -1";btn.insertAdjacentElement("afterend",editor);return}
+ }
+ editor.style.gridColumn="";
+ $("tab-products").appendChild(editor);
+}
+function hideEditor(){$("editorCard").classList.add("hidden");$("selectedActions").classList.add("hidden");$("selectHint").classList.remove("hidden")}
+function showEditor(){$("editorCard").classList.remove("hidden");$("selectedActions").classList.toggle("hidden",selectedId===null);$("selectHint").classList.add("hidden");placeEditor()}
+function selectApp(id){selectedId=id;renderList();fillForm();showEditor();$("editorCard").scrollIntoView({behavior:"smooth",block:"nearest"})}
+function openSelectedEditor(){if(selectedId===null)return;showEditor();$("editorCard").scrollIntoView({behavior:"smooth",block:"start"})}
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+const STATUS_THEME_STYLES={default:{bg:"",text:""},blue:{bg:"#e7f2ff",text:"#2466a2"},purple:{bg:"#f0eaff",text:"#6841a5"},orange:{bg:"#fff1dc",text:"#98600b"},pink:{bg:"#ffeaf1",text:"#a83d67"},dark:{bg:"#26384a",text:"#ffffff"}};
+function toggleCustomStatusColors(){const custom=$("statusTheme").value==="custom";$("customStatusColors").classList.toggle("hidden",!custom);updateStatusColorPreview()}
+function updateStatusColorPreview(){
+ const theme=$("statusTheme").value,preview=$("statusColorPreview"),style=STATUS_THEME_STYLES[theme]||STATUS_THEME_STYLES.default;
+ if(theme==="custom"){preview.style.background=$("statusBgColor").value;preview.style.color=$("statusTextColor").value}
+ else if(theme==="default"){const s=$("appStatus").value;preview.style.background=s==="soldout"?"#fff0f0":s==="maintenance"?"#fff6df":"#e9f8ee";preview.style.color=s==="soldout"?"#b33b3b":s==="maintenance"?"#946c12":"#267344"}
+ else{preview.style.background=style.bg;preview.style.color=style.text}
+ preview.textContent=$("appStatus").value==="soldout"?"HABIS":$("appStatus").value==="maintenance"?"MAINTENANCE":"TERSEDIA";
+}
+function refreshCategorySuggestions(selected){
+ const sel=$("appCategory");if(!sel)return;
+ const cur=selected!==undefined?selected:(sel.value==="__new__"?"":sel.value);
+ const seen=new Map();
+ ["Streaming","Musik","Desain & Video","Desain & Foto","Produktivitas","Lainnya",...catalog.map(a=>String(a.c||"").trim().replace(/\s+/g," ")),String(cur||"").trim()].forEach(n=>{if(n&&!seen.has(n.toLowerCase()))seen.set(n.toLowerCase(),n)});
+ const names=[...seen.values()];
+ names.sort((x,y)=>x.localeCompare(y,"id",{sensitivity:"base"}));
+ sel.innerHTML=names.map(n=>`<option value="${esc(n)}">${esc(n)}</option>`).join("")+'<option value="__new__">＋ Kategori baru…</option>';
+ const hit=names.find(n=>n.toLowerCase()===String(cur||"Lainnya").toLowerCase());
+ sel.value=hit||"Lainnya";
+ const box=$("appCategoryNew");box.classList.add("hidden");box.value="";
+}
+function onCategoryChange(){const isNew=$("appCategory").value==="__new__",box=$("appCategoryNew");box.classList.toggle("hidden",!isNew);if(isNew)box.focus()}
+function getCategory(){const v=$("appCategory").value,raw=v==="__new__"?$("appCategoryNew").value:v;return String(raw||"").trim().replace(/\s+/g," ")||"Lainnya"}
+function fillForm(){dirty=false;let a=catalog.find(x=>x.id===selectedId);if(!a){resetForm();return}$("formTitle").textContent="Edit: "+a.n;$("appName").value=a.n||"";$("appIcon").value=a.i||"";$("appLogo").value=a.logo||"";previewAppLogo();refreshCategorySuggestions(a.c||"Lainnya");$("appStatus").value=a.s||"available";$("appBadge").value=a.b||"";$("statusTheme").value=a.statusTheme||"default";$("statusBgColor").value=/^#[0-9a-f]{6}$/i.test(a.statusBg||"")?a.statusBg:"#e9f8ee";$("statusTextColor").value=/^#[0-9a-f]{6}$/i.test(a.statusText||"")?a.statusText:"#267344";toggleCustomStatusColors();updateStatusColorPreview();$("appTerms").value=(a.t||[]).map(t=>String(t??"")).join("\n").replace(/\\n/g,"\n");renderPackages(a.p||[],{requiresEmail:!!(a.requiresEmail||a.requiresEmailPassword),requiresEmailPassword:!!a.requiresEmailPassword,emailMustBeNew:!!a.emailMustBeNew})}
+function renderPackages(p,legacy={}){
+ $("packagesEditor").innerHTML=p.map((pkg,pi)=>{
+  const cfg=pkg[2]||legacy,st=pkg[3]||{};
+  return `<div class="pkg" data-pkg="${pi}">
+   <div style="display:flex;gap:7px"><input class="pkg-name" value="${esc(pkg[0])}" placeholder="Nama paket"><button class="red" onclick="removePackage(${pi})">Hapus</button></div>
+   <div class="card" style="background:#f4faff;padding:10px;margin:9px 0">
+    <b>Warna label status paket</b><label>Pilih tema warna</label>
+    <select class="pkg-status-theme" onchange="togglePackageStatusColors(this)">
+     <option value="default" ${(!st.statusTheme||st.statusTheme==='default')?'selected':''}>Ikuti warna aplikasi</option>
+     <option value="blue" ${st.statusTheme==='blue'?'selected':''}>Biru</option><option value="purple" ${st.statusTheme==='purple'?'selected':''}>Ungu</option><option value="orange" ${st.statusTheme==='orange'?'selected':''}>Oranye</option><option value="pink" ${st.statusTheme==='pink'?'selected':''}>Merah muda</option><option value="dark" ${st.statusTheme==='dark'?'selected':''}>Gelap</option><option value="custom" ${st.statusTheme==='custom'?'selected':''}>Custom sendiri</option>
+    </select>
+    <div class="pkg-custom-colors grid ${st.statusTheme==='custom'?'':'hidden'}">
+     <div><label>Warna latar</label><input class="pkg-status-bg" type="color" value="${/^#[0-9a-f]{6}$/i.test(st.statusBg||'')?st.statusBg:'#e9f8ee'}" style="height:44px;padding:4px"></div>
+     <div><label>Warna tulisan</label><input class="pkg-status-text" type="color" value="${/^#[0-9a-f]{6}$/i.test(st.statusText||'')?st.statusText:'#267344'}" style="height:44px;padding:4px"></div>
+    </div>
+    <div class="muted">Warna bawaan seluruh harga dalam paket ini. Setiap harga juga dapat memakai warna sendiri atau mengikuti warna paket.</div>
+    <span class="pkg-status-preview status-badge" style="display:inline-block;margin-top:8px">TERSEDIA</span>
+   </div>
+   <div class="card" style="background:#f4faff;padding:10px;margin:9px 0">
+    <b>Data wajib pembeli untuk paket ini</b>
+    <label style="display:flex;align-items:center;gap:8px"><input class="pkg-email" type="checkbox" style="width:auto" ${cfg.requiresEmail||cfg.requiresEmailPassword?"checked":""}> Minta email saja</label>
+    <label style="display:flex;align-items:center;gap:8px"><input class="pkg-email-password" type="checkbox" style="width:auto" ${cfg.requiresEmailPassword?"checked":""}> Minta email dan password</label>
+    <label style="display:flex;align-items:center;gap:8px"><input class="pkg-email-new" type="checkbox" style="width:auto" ${cfg.emailMustBeNew?"checked":""}> Email wajib baru</label>
+    <div class="muted">Ini menjadi pengaturan bawaan untuk semua harga dalam paket. Pengaturan per harga dapat menimpa pengaturan ini.</div>
+   </div>
+   <div class="small" style="margin:8px 0">Durasi · Harga normal · Harga promo</div>
+   <div>${pkg[1].map((v,vi)=>{
+    const pc=v[3]||{},ps=v[4]||{},pd=v[5]||{};
+    return `<div class="duration-row" data-duration="${vi}">
+      <input class="dur-name" value="${esc(v[0])}" placeholder="Durasi">
+      <input class="normal" type="number" min="0" value="${Number(v[1])||0}" placeholder="Normal">
+      <input class="promo" type="number" min="0" value="${Number(v[2])||0}" placeholder="Promo">
+      <button class="red" onclick="removeDuration(${pi},${vi})">×</button>
+      <div class="card price-config" style="grid-column:1/-1;background:#fff;padding:10px;margin:3px 0 9px">
+       <b>Pengaturan khusus harga: ${esc(v[0])}</b>
+       <label>Status produk untuk harga ini</label>
+       <select class="price-product-status">
+        <option value="inherit" ${!pd.status||pd.status==='inherit'?'selected':''}>Ikuti status aplikasi</option>
+        <option value="available" ${pd.status==='available'?'selected':''}>Tersedia</option>
+        <option value="soldout" ${pd.status==='soldout'?'selected':''}>Habis</option>
+        <option value="maintenance" ${pd.status==='maintenance'?'selected':''}>Maintenance</option>
+       </select>
+       <label>Label produk untuk harga ini</label>
+       <input class="price-product-badge" value="${esc(pd.badge||'')}" placeholder="Kosongkan untuk mengikuti label aplikasi">
+       <div class="muted">Status dan label ini hanya berlaku untuk pilihan harga/durasi ini. Pilih Ikuti status aplikasi dan kosongkan label agar mengikuti pengaturan aplikasi.</div>
+       <label>Pengaturan data pembeli</label><select class="price-data-mode" onchange="togglePriceDataMode(this)"><option value="inherit" ${pc._mode!=='custom'?'selected':''}>Ikuti pengaturan paket</option><option value="custom" ${pc._mode==='custom'?'selected':''}>Atur khusus untuk harga ini</option></select>
+       <div class="price-data-fields ${pc._mode==='custom'?'':'hidden'}">
+       <label style="display:flex;align-items:center;gap:8px"><input class="price-email" type="checkbox" style="width:auto" ${pc.requiresEmail===true||pc.requiresEmailPassword===true?'checked':''}> Minta email saja</label>
+       <label style="display:flex;align-items:center;gap:8px"><input class="price-email-password" type="checkbox" style="width:auto" ${pc.requiresEmailPassword===true?'checked':''}> Minta email dan password</label>
+       <label style="display:flex;align-items:center;gap:8px"><input class="price-email-new" type="checkbox" style="width:auto" ${pc.emailMustBeNew===true?'checked':''}> Email wajib baru</label>
+       </div>
+       <label>Tema warna label harga</label>
+       <select class="price-status-theme" onchange="togglePriceStatusColors(this)">
+        <option value="inherit" ${!ps.statusTheme||ps.statusTheme==='inherit'?'selected':''}>Ikuti warna paket</option>
+        <option value="app">Ikuti warna aplikasi</option><option value="auto" ${ps.statusTheme==='auto'?'selected':''}>Warna otomatis sesuai status</option>
+        <option value="blue" ${ps.statusTheme==='blue'?'selected':''}>Biru</option><option value="purple" ${ps.statusTheme==='purple'?'selected':''}>Ungu</option><option value="orange" ${ps.statusTheme==='orange'?'selected':''}>Oranye</option><option value="pink" ${ps.statusTheme==='pink'?'selected':''}>Merah muda</option><option value="dark" ${ps.statusTheme==='dark'?'selected':''}>Gelap</option><option value="custom" ${ps.statusTheme==='custom'?'selected':''}>Custom sendiri</option>
+       </select>
+       <div class="price-custom-colors grid ${ps.statusTheme==='custom'?'':'hidden'}">
+        <div><label>Warna latar</label><input class="price-status-bg" type="color" value="${/^#[0-9a-f]{6}$/i.test(ps.statusBg||'')?ps.statusBg:'#e9f8ee'}" style="height:44px;padding:4px"></div>
+        <div><label>Warna tulisan</label><input class="price-status-text" type="color" value="${/^#[0-9a-f]{6}$/i.test(ps.statusText||'')?ps.statusText:'#267344'}" style="height:44px;padding:4px"></div>
+       </div>
+      </div>
+     </div>`;
+   }).join("")}</div>
+   <button class="soft" onclick="addDuration(${pi})">＋ Tambah durasi</button>
+  </div>`;
+ }).join("");
+ document.querySelectorAll('.pkg').forEach(card=>updatePackageStatusPreview(card));
+}
+function togglePackageStatusColors(sel){const card=sel.closest('.pkg');card.querySelector('.pkg-custom-colors').classList.toggle('hidden',sel.value!=='custom');updatePackageStatusPreview(card)}
+function updatePackageStatusPreview(card){if(!card)return;const theme=card.querySelector('.pkg-status-theme').value,preview=card.querySelector('.pkg-status-preview'),appStatus=$('appStatus').value;let bg,text;if(theme==='custom'){bg=card.querySelector('.pkg-status-bg').value;text=card.querySelector('.pkg-status-text').value}else if(theme==='default'){const a=STATUS_THEME_STYLES[$('statusTheme').value]||STATUS_THEME_STYLES.default;if($('statusTheme').value==='custom'){bg=$('statusBgColor').value;text=$('statusTextColor').value}else if($('statusTheme').value==='default'){bg=appStatus==='soldout'?'#fff0f0':appStatus==='maintenance'?'#fff6df':'#e9f8ee';text=appStatus==='soldout'?'#b33b3b':appStatus==='maintenance'?'#946c12':'#267344'}else{bg=a.bg;text=a.text}}else{const a=STATUS_THEME_STYLES[theme];bg=a.bg;text=a.text}preview.style.background=bg;preview.style.color=text;preview.textContent=appStatus==='soldout'?'HABIS':appStatus==='maintenance'?'MAINTENANCE':'TERSEDIA'}
+function collectPackages(keep){
+ const cards=[...$("packagesEditor").querySelectorAll("[data-pkg]")].map(card=>{
+  const durations=[...card.querySelectorAll(".duration-row")].map(r=>{
+   const priceCfg=r.querySelector(".price-data-mode").value==="custom"?{_mode:"custom",requiresEmail:r.querySelector(".price-email").checked||r.querySelector(".price-email-password").checked,requiresEmailPassword:r.querySelector(".price-email-password").checked,emailMustBeNew:r.querySelector(".price-email-new").checked}:{};
+   const theme=r.querySelector(".price-status-theme").value;
+   const priceStyle=theme==="inherit"?{}:{statusTheme:theme,statusBg:r.querySelector(".price-status-bg").value,statusText:r.querySelector(".price-status-text").value};
+   const productStatus=r.querySelector(".price-product-status").value;
+   const productBadge=r.querySelector(".price-product-badge").value.trim();
+   const priceProduct={...(productStatus!=="inherit"?{status:productStatus}:{}),...(productBadge?{badge:productBadge}:{})};
+   return [r.querySelector(".dur-name").value.trim(),Number(r.querySelector(".normal").value)||0,Number(r.querySelector(".promo").value)||0,priceCfg,priceStyle,priceProduct];
+  });
+  return [card.querySelector(".pkg-name").value.trim(),durations,
+   {requiresEmail:card.querySelector(".pkg-email").checked||card.querySelector(".pkg-email-password").checked,requiresEmailPassword:card.querySelector(".pkg-email-password").checked,emailMustBeNew:card.querySelector(".pkg-email-new").checked},
+   {statusTheme:card.querySelector('.pkg-status-theme').value,statusBg:card.querySelector('.pkg-status-bg').value,statusText:card.querySelector('.pkg-status-text').value}];
+ });
+ if(keep)return cards;
+ return cards.map(p=>[p[0],p[1].filter(v=>v[0]),p[2],p[3]]).filter(p=>p[0]&&p[1].length);
+}
+function togglePriceDataMode(sel){sel.closest('.price-config').querySelector('.price-data-fields').classList.toggle('hidden',sel.value!=='custom')}
+function togglePriceStatusColors(sel){sel.closest('.price-config').querySelector('.price-custom-colors').classList.toggle('hidden',sel.value!=='custom')}
+function addPackage(){let p=collectPackages(true);p.push(["Paket baru",[["1 Bulan",0,0]]]);renderPackages(p)}
+function removePackage(i){let p=collectPackages(true);p.splice(i,1);renderPackages(p)}
+function addDuration(i){let p=collectPackages(true);if(p[i])p[i][1].push(["Durasi baru",0,0]);renderPackages(p)}
+function removeDuration(i,j){let p=collectPackages(true);if(p[i])p[i][1].splice(j,1);renderPackages(p)}
+function resetForm(){dirty=false;selectedId=null;$("formTitle").textContent="Aplikasi baru";["appName","appIcon","appBadge","appTerms","appLogo"].forEach(id=>$(id).value="");previewAppLogo();refreshCategorySuggestions("Lainnya");$("appStatus").value="available";$("statusTheme").value="default";$("statusBgColor").value="#e9f8ee";$("statusTextColor").value="#267344";toggleCustomStatusColors();updateStatusColorPreview();renderPackages([["Paket baru",[["1 Bulan",0,0]]]]);renderList();showEditor()}
+function addApp(){selectedId=null;resetForm();$("formTitle").textContent="Tambah aplikasi baru";$("appName").focus()}
+async function deleteApp(){
+ const a=catalog.find(x=>x.id===selectedId);if(!a){alert("Pilih aplikasi yang ingin dihapus terlebih dahulu.");return}
+ if(!confirm(`Hapus ${a.n} dari katalog? Tindakan ini tidak dapat dibatalkan.`))return;
+ const prev=catalog.slice(),id=selectedId;
+ catalog=catalog.filter(x=>x.id!==id);selectedId=null;
+ const ok=await persistCatalogAndVerify(`${a.n} berhasil dihapus dari katalog.`);
+ if(ok){renderList();hideEditor()}else{catalog=prev;selectedId=id;renderList();fillForm();showEditor()}
+}
+let catalogSaveInProgress=false;
+function stableJson(value){
+ if(Array.isArray(value))return "["+value.map(stableJson).join(",")+"]";
+ if(value&&typeof value==="object")return "{"+Object.keys(value).sort().map(k=>JSON.stringify(k)+":"+stableJson(value[k])).join(",")+"}";
+ return JSON.stringify(value);
+}
+async function persistCatalogAndVerify(successMessage="Katalog berhasil disimpan ke database."){
+ if(catalogSaveInProgress)return false;
+ catalogSaveInProgress=true;
+ const saveButtons=[...document.querySelectorAll('button[onclick="saveApp()"],button[onclick="publish()"]')];
+ saveButtons.forEach(b=>{b.disabled=true;b.dataset.oldText=b.textContent;b.textContent="Menyimpan...";});
+ try{
+  const {data:cur,error:curErr}=await sb.from("store_catalog").select("updated_at").eq("id",1).single();
+  if(curErr)throw curErr;
+  if(catalogVersion!==null&&(cur&&cur.updated_at)!==catalogVersion&&!confirm("Katalog di database sudah diubah dari perangkat/tab lain sejak halaman ini dimuat. Menyimpan akan MENIMPA perubahan itu. Lanjutkan?"))throw new Error("Dibatalkan: katalog berubah di tempat lain. Muat ulang halaman admin lalu ulangi perubahan.");
+  const payload={id:1,catalog:catalog,updated_at:new Date().toISOString()};
+  const {error:writeError}=await sb.from("store_catalog").upsert(payload);
+  if(writeError)throw writeError;
+  const {data,error:readError}=await sb.from("store_catalog").select("catalog,updated_at").eq("id",1).single();
+  if(readError)throw readError;
+  if(!data||!Array.isArray(data.catalog))throw new Error("Database tidak mengembalikan data katalog yang valid.");
+  if(stableJson(data.catalog)!==stableJson(catalog))throw new Error("Data berhasil dikirim, tetapi hasil baca ulang berbeda. Periksa Firestore Rules dan coba lagi.");
+  catalog=data.catalog;catalogVersion=data.updated_at??null;
+  renderList();
+  if(selectedId!==null){fillForm();showEditor();}
+  notice("✓ "+successMessage+" Perubahan sudah diverifikasi dengan membaca ulang database.");
+  return true;
+ }catch(e){
+  notice("GAGAL menyimpan/verifikasi: "+(e?.message||"Periksa koneksi dan izin Firebase."),"msg");
+  return false;
+ }finally{
+  catalogSaveInProgress=false;
+  saveButtons.forEach(b=>{b.disabled=false;if(b.dataset.oldText){b.textContent=b.dataset.oldText;delete b.dataset.oldText;}});
+ }
+}
+async function saveApp(){
+ let n=$("appName").value.trim(),p=collectPackages();
+ if($("appCategory").value==="__new__"&&!$("appCategoryNew").value.trim()){alert("Ketik nama kategori baru, atau pilih kategori yang sudah ada.");$("appCategoryNew").focus();return}
+ if(!n||!p.length){alert("Isi nama aplikasi dan minimal satu paket/durasi.");return}
+ if(p.some(pk=>pk[1].some(v=>v[1]<=0||(v[2]>0&&v[2]>=v[1])))){alert("Periksa harga: harga normal harus lebih dari 0 dan harga promo (jika diisi) harus lebih kecil dari harga normal.");return}
+ {const names=p.map(pk=>pk[0].toLowerCase());const dupPkg=names.find((x,i)=>names.indexOf(x)!==i);if(dupPkg){alert("Nama paket kembar: \""+dupPkg+"\". Beri nama berbeda agar harga tidak tertukar saat pembeli memesan.");return}
+  for(const pk of p){const ds=pk[1].map(v=>v[0].toLowerCase());const dd=ds.find((x,i)=>ds.indexOf(x)!==i);if(dd){alert("Durasi kembar \""+dd+"\" di paket \""+pk[0]+"\". Satu paket tidak boleh punya dua durasi bernama sama.");return}}}
+ {const lg=$("appLogo").value.trim();if(lg&&!/^https?:\/\//i.test(lg)){alert("URL logo harus diawali http:// atau https://");return}}
+ if(catalog.some(x=>x.id!==selectedId&&String(x.n||"").trim().toLowerCase()===n.toLowerCase())&&!confirm("Sudah ada aplikasi bernama \""+n+"\". Tetap simpan sebagai aplikasi terpisah?"))return;
+ const snap=JSON.stringify(catalog),snapSel=selectedId;
+ let a=catalog.find(x=>x.id===selectedId);
+ if(!a){let id=Math.max(0,...catalog.map(x=>Number(x.id)||0))+1;a={id};catalog.push(a);selectedId=id}
+ a.n=n;a.i=$("appIcon").value.trim()||n[0].toUpperCase();a.logo=$("appLogo").value.trim();
+ if(!a.logo)delete a.logo;
+ {const raw=getCategory(),hit=catalog.find(x=>x!==a&&String(x.c||"").trim().toLowerCase()===raw.toLowerCase());a.c=hit?String(hit.c).trim():raw}a.s=$("appStatus").value;a.b=$("appBadge").value.trim();
+ a.statusTheme=$("statusTheme").value;
+ if(a.statusTheme==="custom"){a.statusBg=$("statusBgColor").value;a.statusText=$("statusTextColor").value}else{delete a.statusBg;delete a.statusText}
+ a.p=p;a.t=$("appTerms").value.replace(/\\n/g,"\n").split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
+ delete a.requiresEmail;delete a.requiresEmailPassword;delete a.emailMustBeNew;
+ if(!a.b){delete a.b;delete a.k}
+ renderList();fillForm();showEditor();
+ const saved=await persistCatalogAndVerify("Aplikasi berhasil disimpan.");
+ if(saved){dirty=false}else{catalog=JSON.parse(snap);selectedId=snapSel;renderList();showEditor();dirty=true}
+}
+async function publish(){
+ await persistCatalogAndVerify("Katalog berhasil diterbitkan ke website pembeli.");
+}
+function bannerTextRows(){
+ return [...$("bannerTextsEditor").querySelectorAll("[data-banner-text]")].map(row=>({text:row.querySelector("textarea").value.trim(),active:row.querySelector("select").value==="true"})).filter(x=>x.text);
+}
+function renderBannerTexts(rows){
+ const root=$("bannerTextsEditor");
+ root.innerHTML=rows.map((r,i)=>`<div data-banner-text class="card" style="padding:10px;margin:8px 0;border:1px solid #d9e8f5"><div class="row" style="justify-content:space-between;align-items:center"><b>Teks Promo ${i+1}</b><button type="button" class="soft" onclick="removeBannerText(${i})">Hapus</button></div><textarea placeholder="Isi teks promo ${i+1}">${String(r.text||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}</textarea><label>Status teks</label><select><option value="true" ${r.active!==false?"selected":""}>Aktif — tampilkan</option><option value="false" ${r.active===false?"selected":""}>Nonaktif — sembunyikan</option></select></div>`).join("");
+}
+function addBannerText(){let rows=bannerTextRows();rows.push({text:"",active:true});renderBannerTexts(rows)}
+function removeBannerText(i){let rows=bannerTextRows();rows.splice(i,1);renderBannerTexts(rows)}
+async function loadBanner(){let {data,error}=await sb.from("store_settings").select("*").eq("id",1).maybeSingle();if(error){notice("Belum bisa memuat banner Firestore: "+error.message,"bannerMsg");return}if(data){let rawText=data.announcement||"",rows=[];try{let parsed=JSON.parse(rawText);if(Array.isArray(parsed))rows=parsed.map(x=>typeof x==="string"?{text:x,active:true}:x)}catch{}if(!rows.length&&rawText)rows=[{text:rawText,active:true}];renderBannerTexts(rows);$("bannerActive").value=String(!!data.announcement_active);$("bannerMode").value=data.announcement_mode||"text";let raw=data.announcement_image||"";try{let parsed=JSON.parse(raw);$("bannerImage").value=Array.isArray(parsed)?parsed.join("\n"):raw}catch{$("bannerImage").value=raw}previewBanner()}else renderBannerTexts([])}
+function previewBanner(){let urls=$("bannerImage").value.split(/\n/).map(x=>x.trim()).filter(Boolean),img=$("bannerPreview");if(urls.length){img.src=urls[0];img.classList.remove("hidden");img.onerror=()=>{img.classList.add("hidden");notice("URL gambar pertama tidak dapat dibuka.","bannerMsg")}}else{img.classList.add("hidden");img.removeAttribute("src")}}
+$("bannerImage").addEventListener("input",previewBanner);
+function previewAppLogo(){let u=$("appLogo").value.trim(),img=$("appLogoPreview");if(u){img.src=u;img.classList.remove("hidden");img.onerror=()=>img.classList.add("hidden")}else{img.classList.add("hidden");img.removeAttribute("src")}}
+$("appLogo").addEventListener("input",previewAppLogo);
+async function saveSetting(fields,keys){
+ const {error}=await sb.from("store_settings").upsert({id:1,...fields,updated_at:new Date().toISOString()});
+ if(error)throw error;
+ const {data,error:e2}=await sb.from("store_settings").select(keys.join(",")).eq("id",1).single();
+ if(e2)throw e2;
+ for(const k of keys){if(String(data[k]??"")!==String(fields[k]??""))throw new Error("Hasil baca ulang berbeda pada '"+k+"'. Periksa Firestore Rules pada settings/main.")}
+}
+async function saveBanner(){
+ if(busy.banner)return;busy.banner=true;
+ try{
+  const lines=$("bannerImage").value.split(/\n/).map(x=>x.trim()).filter(Boolean),bad=lines.find(x=>!/^https?:\/\//i.test(x));
+  if(bad){notice("Gagal: URL gambar harus diawali http/https → "+bad,"bannerMsg");return}
+  const stored=lines.length>1?JSON.stringify(lines):(lines[0]||null),mode=$("bannerMode").value,texts=bannerTextRows();
+  await saveSetting({announcement:JSON.stringify(texts),announcement_active:$("bannerActive").value==="true",announcement_mode:mode,announcement_image:stored},["announcement","announcement_active","announcement_mode","announcement_image"]);
+  notice("✓ Banner tersimpan dan terverifikasi dengan membaca ulang database.","bannerMsg");
+ }catch(e){notice("GAGAL menyimpan banner: "+(e?.message||e),"bannerMsg")}finally{busy.banner=false}
+}
+
+let qrisDataUrl=null;
+async function loadQris(){let {data,error}=await sb.from("store_settings").select("qris_image_data").eq("id",1).maybeSingle();if(error){notice("Gagal memuat QRIS dari Firestore: "+error.message,"qrisMsg");return}qrisDataUrl=data?.qris_image_data||null;$("qrisPreview").src=qrisDataUrl||"qris-razh-store.jpg";$("qrisFile").value=""}
+$("qrisFile").addEventListener("change",function(){let f=this.files&&this.files[0];if(!f)return;if(!/^image\/(png|jpeg|webp)$/.test(f.type)){notice("Pilih gambar PNG, JPG, atau WEBP.","qrisMsg");this.value="";return}if(f.size>1024*1024){notice("Ukuran gambar maksimal 1 MB. Kompres gambar lalu pilih lagi.","qrisMsg");this.value="";return}notice("Mengunggah QRIS ke Cloudinary...","qrisMsg");uploadImageToCloudinary(f).then(url=>{$("qrisPreview").src=url;qrisDataUrl=url;notice("Gambar siap. Tekan Simpan QRIS untuk menerapkan.","qrisMsg")}).catch(e=>{notice(e.message,"qrisMsg");this.value=""})});
+async function saveQris(){
+ if(!qrisDataUrl){notice("Pilih gambar QRIS terlebih dahulu.","qrisMsg");return}
+ if(busy.qris)return;busy.qris=true;
+ try{await saveSetting({qris_image_data:qrisDataUrl},["qris_image_data"]);notice("✓ QRIS tersimpan dan terverifikasi.","qrisMsg")}
+ catch(e){notice("GAGAL menyimpan QRIS: "+(e?.message||e),"qrisMsg")}finally{busy.qris=false}
+}
+async function resetQris(){
+ if(busy.qris)return;busy.qris=true;
+ try{await saveSetting({qris_image_data:null},["qris_image_data"]);qrisDataUrl=null;$("qrisPreview").src="qris-razh-store.jpg";$("qrisFile").value="";notice("✓ QRIS bawaan dipakai kembali (terverifikasi).","qrisMsg")}
+ catch(e){notice("GAGAL mengembalikan QRIS: "+(e?.message||e),"qrisMsg")}finally{busy.qris=false}
+}
+let ordersCache=[];
+const STATUS_ID={pending:"Menunggu",processing:"Diproses",completed:"Selesai",cancelled:"Dibatalkan"};
+const orderCode=o=>String(o.id||"").slice(-6).toUpperCase();
+function currentPrice(o){const a=catalog.find(x=>x.n===o.app_name),pk=a&&(a.p||[]).find(x=>x[0]===o.package_name),v=pk&&(pk[1]||[]).find(x=>x[0]===o.duration);if(!v)return null;return(Number(v[2])>0&&Number(v[2])<Number(v[1]))?Number(v[2]):Number(v[1])}
+function priceWarning(o){
+ if(o.status!=="pending"&&o.status!=="processing")return"";
+ const u=Number(o.unit_price),q=Number(o.quantity),t=Number(o.total_price);
+ if(!(u>0)||t!==u*q)return `<div class="price-warn">⚠ Nilai pesanan tidak wajar (satuan ${money(u)}, total ${money(t)}). Jangan proses sebelum dicek.</div>`;
+ const c=currentPrice(o);
+ if(c!==null&&c!==u)return `<div class="price-warn">⚠ Harga di pesanan ${money(u)} ≠ katalog sekarang ${money(c)}. Cocokkan dengan bukti bayar (harga mungkin baru diubah).</div>`;
+ return"";
+}
+const orderDate=o=>{const d=o.created_at?new Date(o.created_at):null;return d&&!isNaN(d)?d.toLocaleString("id-ID"):"-"};
+async function loadOrders(){
+ const {data,error}=await sb.from("store_orders").select("*").order("created_at",{ascending:false}).limit(200);
+ if(error){$("ordersList").textContent="Gagal memuat pesanan dari Firestore: "+error.message;return}
+ ordersCache=data||[];updatePendingBadge();renderOrders();
+}
+function updatePendingBadge(){const n=ordersCache.filter(o=>o.status==="pending").length,b=$("pendingBadge");if(b){b.textContent=n>99?"99+":String(n);b.classList.toggle("hidden",n===0)}}
+function renderOrders(){
+ const f=$("orderFilter").value||"all",q=($("orderSearch").value||"").trim().toLowerCase();
+ const rows=ordersCache.filter(o=>(f==="all"||o.status===f)&&(!q||(orderCode(o)+" "+o.app_name+" "+o.package_name).toLowerCase().includes(q)));
+ $("ordersInfo").textContent=ordersCache.length?`Menampilkan ${rows.length} dari ${ordersCache.length} pesanan terbaru`:"";
+ if(!ordersCache.length){$("ordersList").textContent="Belum ada pesanan.";return}
+ if(!rows.length){$("ordersList").textContent="Tidak ada pesanan yang cocok dengan filter.";return}
+ $("ordersList").innerHTML=rows.map(o=>`<div class="order"><span class="code">#${esc(orderCode(o))}</span><b>${esc(o.app_name)}</b> · ${esc(o.package_name)}<span class="chip ${esc(o.status)}">${esc(STATUS_ID[o.status]||o.status)}</span><div class="muted">${esc(o.duration)} · ${esc(o.quantity)} akun · ${money(o.total_price)} · ${esc(orderDate(o))}</div>${priceWarning(o)}<div class="row"><select id="status-${esc(o.id)}">${Object.keys(STATUS_ID).map(k=>`<option value="${k}" ${o.status===k?"selected":""}>${STATUS_ID[k]}</option>`).join("")}</select><button class="soft" onclick="updateOrder('${esc(o.id)}')">Simpan status</button></div></div>`).join("");
+}
+function exportOrdersCsv(){
+ if(!ordersCache.length){alert("Belum ada pesanan untuk diekspor.");return}
+ const q=v=>'"'+String(v??"").replace(/"/g,'""')+'"';
+ const lines=[["Kode","Tanggal","Aplikasi","Paket","Durasi","Jumlah","Harga satuan","Total","Status"].map(q).join(",")].concat(ordersCache.map(o=>[orderCode(o),o.created_at||"",o.app_name,o.package_name,o.duration,o.quantity,o.unit_price,o.total_price,STATUS_ID[o.status]||o.status].map(q).join(",")));
+ const blob=new Blob(["\ufeff"+lines.join("\r\n")],{type:"text/csv;charset=utf-8"}),link=document.createElement("a");
+ link.href=URL.createObjectURL(blob);link.download="pesanan-razh-store-"+new Date().toISOString().slice(0,10)+".csv";document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(link.href),4000);
+}
+async function updateOrder(id){
+ const status=$("status-"+id).value;
+ if((status==="cancelled"||status==="completed")&&!confirm("Ubah status pesanan menjadi \""+STATUS_ID[status]+"\"? Ini memengaruhi statistik omzet."))return;
+ const {data,error}=await sb.from("store_orders").update({status}).eq("id",id).select("id,status");
+ if(error){alert("Gagal mengubah status: "+error.message);return}
+ if(!data||!data.length||data[0].status!==status){alert("Status TIDAK berubah di database (kemungkinan Firestore Rules menolak UPDATE). Jalankan Firestore Rules.");loadOrders();return}
+ await loadOrders();
+}
+async function loadStats(){
+ let {data,error}=await sb.from("store_orders").select("app_name,total_price,status,created_at");
+ if(error){$("topProducts").textContent="Gagal memuat statistik: "+error.message;return}
+ const done=data.filter(x=>x.status==="completed"),now=new Date(),sum=l=>l.reduce((s,x)=>s+Number(x.total_price||0),0);
+ const inMonth=x=>{const d=x.created_at&&new Date(x.created_at);return d&&d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear()},isToday=x=>{const d=x.created_at&&new Date(x.created_at);return d&&d.toDateString()===now.toDateString()};
+ $("statRevenue").textContent=money(sum(done));$("statMonth").textContent=money(sum(done.filter(inMonth)));$("statToday").textContent=data.filter(isToday).length;
+ $("statOrders").textContent=data.length;$("statPending").textContent=data.filter(x=>x.status==="pending").length;
+ let counts={};data.forEach(x=>counts[x.app_name]=(counts[x.app_name]||0)+1);let top=Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,5);
+ $("topProducts").innerHTML=top.length?top.map(([n,c])=>`<div class="bar-row"><span>${esc(n)}</span><i style="--w:${Math.round(c/top[0][1]*100)}%"></i><b>${c}</b></div>`).join(""):"Belum ada data.";
+}
+async function uploadAppLogo(){const f=$("appLogoFile").files[0];if(!f){alert("Pilih file logo terlebih dahulu.");return}try{$("appLogo").value=await uploadImageToCloudinary(f);previewAppLogo();notice("Logo berhasil diunggah ke Cloudinary.")}catch(e){alert(e.message)}}
+async function uploadBannerImages(){const files=[...$("bannerFiles").files];if(!files.length){notice("Pilih gambar banner terlebih dahulu.","bannerMsg");return}try{const urls=[];for(const f of files)urls.push(await uploadImageToCloudinary(f));const old=$("bannerImage").value.split(/\n/).map(x=>x.trim()).filter(Boolean);$("bannerImage").value=[...old,...urls].join("\n");previewBanner();notice(urls.length+" gambar diunggah ke Cloudinary.","bannerMsg")}catch(e){notice("Upload gagal: "+e.message,"bannerMsg")}}
+["appStatus","statusTheme","statusBgColor","statusTextColor"].forEach(id=>{const el=$(id);if(el){el.addEventListener("input",updateStatusColorPreview);el.addEventListener("change",updateStatusColorPreview)}});
+["email","password"].forEach(id=>$(id).addEventListener("keydown",e=>{if(e.key==="Enter")login()}));
+(async()=>{try{const {data}=await sb.auth.getSession();if(data?.session?.user?.id===ADMIN_UID&&await loadCatalog()){$("loginCard").classList.add("hidden");$("panel").classList.remove("hidden");loadOrders()}}catch(e){}})();
+$("editorCard").addEventListener("input",()=>{dirty=true});
+window.addEventListener("beforeunload",e=>{if(dirty){e.preventDefault();e.returnValue=""}});
+</script></body></html>
