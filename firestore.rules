@@ -1,0 +1,32 @@
+// RAZH STORE — Firestore Rules (versi diperketat, v3)
+// BELUM AKTIF otomatis. Salin ke Firebase Console → Firestore Database → Rules → Publish.
+// Sebelum Publish, uji dulu di tab "Rules Playground" (lihat PANDUAN-SETUP-FIREBASE.md bagian 1b).
+// Perbedaan dari versi lama: harga satuan harus > 0 dan <= 1.000.000, panjang teks dibatasi,
+// dan admin hanya boleh mengubah field "status" pada pesanan (dengan nilai yang sah).
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAdmin() {
+      return request.auth != null && request.auth.uid == "MCS06oqU2lYJ1qSwVyeQ6J8nOzO2";
+    }
+    match /products/{id} { allow read: if true; allow write: if isAdmin(); }
+    match /settings/{id} { allow read: if true; allow write: if isAdmin(); }
+    match /orders/{id} {
+      allow create: if request.resource.data.keys().hasAll(['app_name','package_name','duration','quantity','unit_price','total_price','status','created_at'])
+        && request.resource.data.keys().hasOnly(['app_name','package_name','duration','quantity','unit_price','total_price','status','created_at'])
+        && request.resource.data.app_name is string && request.resource.data.app_name.size() > 0 && request.resource.data.app_name.size() <= 100
+        && request.resource.data.package_name is string && request.resource.data.package_name.size() > 0 && request.resource.data.package_name.size() <= 100
+        && request.resource.data.duration is string && request.resource.data.duration.size() > 0 && request.resource.data.duration.size() <= 60
+        && request.resource.data.quantity is int && request.resource.data.quantity >= 1 && request.resource.data.quantity <= 10
+        && request.resource.data.unit_price is number && request.resource.data.unit_price > 0 && request.resource.data.unit_price <= 1000000
+        && request.resource.data.total_price is number
+        && request.resource.data.total_price == request.resource.data.unit_price * request.resource.data.quantity
+        && request.resource.data.status == 'pending'
+        && request.resource.data.created_at == request.time;
+      allow read, delete: if isAdmin();
+      allow update: if isAdmin()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status'])
+        && request.resource.data.status in ['pending','processing','completed','cancelled'];
+    }
+  }
+}
